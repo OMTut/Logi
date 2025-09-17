@@ -11,6 +11,8 @@ qt_standard_project_setup(REQUIRES 6.8)
 qt_add_executable(appLogi
     main.cpp
     src/ProcessChecker.cpp
+    src/Settings.cpp
+    src/LogReader.cpp
 )
 
 qt_add_qml_module(appLogi
@@ -21,6 +23,8 @@ qt_add_qml_module(appLogi
         components/CustomTitleBar.qml
         components/ResizeHandles.qml
         components/StatusIndicator.qml
+        components/SettingsDialog.qml
+        components/LogEntryViewer.qml
 
     RESOURCES
         styles/Theme.js

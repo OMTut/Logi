@@ -3,6 +3,8 @@
 #include <QQuickStyle>
 #include <QQmlContext>
 #include "src/ProcessChecker.h"
+#include "src/Settings.h"
+#include "src/LogReader.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,9 +15,25 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     
+    // Create Settings instance and expose it to QML as a context property
+    Settings settings;
+    engine.rootContext()->setContextProperty("appSettings", &settings);
+    
     // Create ProcessChecker instance and expose it to QML as a context property
     ProcessChecker processChecker;
     engine.rootContext()->setContextProperty("processChecker", &processChecker);
+    
+    // Create LogReader instance and expose it to QML as a context property
+    LogReader logReader;
+    engine.rootContext()->setContextProperty("logReader", &logReader);
+    
+    // Connect settings to log reader for automatic log file discovery
+    QObject::connect(&settings, &Settings::starCitizenDirectoryChanged, [&]() {
+        QString directory = settings.starCitizenDirectory();
+        if (!directory.isEmpty()) {
+            logReader.findLogFile(directory);
+        }
+    });
     
     QObject::connect(
         &engine,

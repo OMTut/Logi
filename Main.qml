@@ -31,11 +31,14 @@ Window {
     
     // Main content area
     Rectangle {
+        id: mainContentArea
         anchors.fill: parent
         color: Theme.colors.background
         
         // Window-wide hover detection
         HoverHandler {
+            id: mainHoverHandler
+            enabled: !settingsDialog.opened
             onHoveredChanged: {
                 if (hovered) {
                     mainWindow.opacity = Theme.window.opacityFocused
@@ -55,6 +58,40 @@ Window {
             targetWindow: mainWindow
             windowOpacity: mainWindow.opacity
             showOpacity: true
+        }
+        
+        // Settings button overlay on top of title bar
+        Button {
+            id: settingsButton
+            width: 30
+            height: 30
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.topMargin: (Theme.layout.titleBarHeight - height) / 2
+            anchors.rightMargin: 35 // Leave space for window controls
+            
+            background: Rectangle {
+                color: parent.pressed ? Qt.darker(Theme.colors.accent, 1.3) :
+                       parent.hovered ? Theme.colors.accent : "transparent"
+                radius: 4
+                opacity: parent.hovered || parent.pressed ? 0.8 : 0.5
+            }
+            
+            contentItem: Text {
+                text: "⚙"
+                color: Theme.colors.textPrimary
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+            
+            ToolTip.visible: hovered
+            ToolTip.text: "Settings"
+            ToolTip.delay: 500
+            
+            onClicked: {
+                settingsDialog.open()
+            }
         }
         
         // resize corner (bottom-right)
@@ -144,73 +181,25 @@ Window {
                 width: Math.min(parent.width - Theme.layout.minContentPadding, Theme.layout.maxContentWidth)
                 spacing: Theme.spacing.s6
                 
-                // Subtitle
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Always On Top • Hover to Focus"
-                    color: Theme.colors.textSecondary
-                    font.pixelSize: Theme.fonts.sizeLG
-                }
-                
-                // Example styled button
-                Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: 200
-                    height: 40
-                    color: Theme.button.backgroundColor
-                    radius: Theme.button.borderRadius
-                    
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Example Button"
-                        color: Theme.button.text
-                        font.pixelSize: Theme.fonts.sizeMD
-                    }
-                    
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        
-                        property color originalColor: Theme.button.backgroundColor
-                        property color hoverColor: Qt.lighter(Theme.button.backgroundColor, 1.1)
-                        property color pressColor: Qt.darker(Theme.button.backgroundColor, 1.1)
-                        
-                        onEntered: parent.color = hoverColor
-                        onExited: parent.color = originalColor
-                        onPressed: parent.color = pressColor
-                        onReleased: parent.color = containsMouse ? hoverColor : originalColor
-                    }
-                }
-                
-                // Example card
-                Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: 300
-                    height: 120
-                    color: Theme.card.backgroundColor
-                    radius: Theme.card.borderRadius
-                    border.width: Theme.card.borderWidth
-                    border.color: Theme.card.borderColor
-                    
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: Theme.spacing.s2
-                        
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: "Example Card"
-                            color: Theme.colors.textPrimary
-                            font.pixelSize: Theme.fonts.sizeXL
-                        }
-                        
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: "An Example Card Text"
-                            color: Theme.colors.textSecondary
-                            font.pixelSize: Theme.fonts.sizeSM
-                        }
-                    }
-                }
+            }
+        }
+    }
+    
+    // Settings Dialog
+    SettingsDialog {
+        id: settingsDialog
+        anchors.centerIn: Overlay.overlay
+        
+        onOpened: {
+            mainWindow.opacity = Theme.window.opacityFocused
+        }
+        
+        onClosed: {
+            // Restore hover-based opacity behavior
+            if (mainHoverHandler.hovered) {
+                mainWindow.opacity = Theme.window.opacityFocused
+            } else {
+                mainWindow.opacity = Theme.window.opacityHidden
             }
         }
     }

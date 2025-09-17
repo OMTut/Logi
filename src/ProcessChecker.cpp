@@ -10,6 +10,7 @@
 ProcessChecker::ProcessChecker(QObject *parent)
     : QObject(parent)
     , m_isGameRunning(false)
+    , m_logFileExists(false)
     , m_monitoringTimer(new QTimer(this))
     , m_targetProcessName("StarCitizen.exe")
 {
@@ -123,5 +124,27 @@ void ProcessChecker::setLastCheckTime(const QString& time)
     if (m_lastCheckTime != time) {
         m_lastCheckTime = time;
         emit lastCheckTimeChanged();
+    }
+}
+
+bool ProcessChecker::logFileExists() const
+{
+    return m_logFileExists;
+}
+
+QString ProcessChecker::logFilePath() const
+{
+    return m_logFilePath;
+}
+
+void ProcessChecker::setLogFilePath(const QString &path)
+{
+    if (m_logFilePath != path) {
+        m_logFilePath = path;
+        emit logFilePathChanged();
+        qDebug() << "ProcessChecker: Log file path set to:" << path;
+        
+        // TODO: Check if the log file exists and update m_logFileExists
+        // This will be implemented when we add log file monitoring
     }
 }
