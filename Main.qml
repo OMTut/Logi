@@ -8,7 +8,7 @@ Window {
     width: Theme.window.minWidth
     height: Theme.window.minHeight
     visible: true
-    title: qsTr("Logi - Star Citizen Companion")
+    title: qsTr("Logi")
     color: Theme.window.backgroundColor
     
     // Borderless window for overlay
@@ -51,7 +51,7 @@ Window {
             anchors.left: parent.left
             anchors.right: parent.right
             
-            title: "Overlay App"
+            title: "Logi -"
             targetWindow: mainWindow
             windowOpacity: mainWindow.opacity
             showOpacity: true
@@ -134,6 +134,8 @@ Window {
             // Hide scroll bars but keep scrolling functionality
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+
+            StatusIndicator {}
             
             // Content column with styling examples
             Column {
@@ -141,14 +143,6 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: Math.min(parent.width - Theme.layout.minContentPadding, Theme.layout.maxContentWidth)
                 spacing: Theme.spacing.s6
-                
-                // Welcome text
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Overlay App"
-                    color: Theme.colors.textPrimary
-                    font.pixelSize: Theme.fonts.size3XL
-                }
                 
                 // Subtitle
                 Text {

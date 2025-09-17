@@ -93,8 +93,8 @@ const layout = {
 // Component Specific Styles
 const window = {
     backgroundColor: colors.background,
-    minWidth: 800,
-    minHeight: 600,
+    minWidth: 540,
+    minHeight: 280,
     opacityHidden: opacity.hidden,
     opacityFocused: opacity.focused,
     transitionDuration: opacity.transition,
