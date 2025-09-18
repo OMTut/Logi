@@ -18,15 +18,16 @@ Rectangle {
     Connections {
         target: logReader
         function onNewLogLinesAvailable(lines) {
-            for (var i = 0; i < lines.length; i++) {
-                root.logEntries.push(lines[i])
+            // Add new entries at the beginning (newest first)
+            for (var i = lines.length - 1; i >= 0; i--) {
+                root.logEntries.unshift(lines[i])
             }
             // Trigger model update
             logListView.model = root.logEntries
-            // Auto-scroll to bottom
+            // Keep position at top (showing newest entries)
             Qt.callLater(function() {
                 if (logListView.count > 0) {
-                    logListView.positionViewAtEnd()
+                    logListView.positionViewAtBeginning()
                 }
             })
         }
@@ -54,6 +55,19 @@ Rectangle {
     Component.onCompleted: {
         // Load existing log lines when component starts
         loadInitialEntries()
+    }
+    
+    // Status message when monitoring but no entries yet
+    Label {
+        id: statusMessage
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 8
+        text: "Monitoring New Activity..."
+        color: Theme.colors.textSecondary
+        font.pixelSize: Theme.fonts.sizeMD
+        opacity: 0.7
+        visible: logReader.monitoring && logListView.count === 0
     }
     
     // Log entries list
