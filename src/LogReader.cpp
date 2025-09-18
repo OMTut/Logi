@@ -116,6 +116,14 @@ void LogReader::startMonitoring(int interval)
     }
 
     qDebug() << "LogReader: Starting log monitoring with" << interval << "ms interval";
+    
+    // Set position to end of file to only show new entries from now on
+    QFile file(m_logFilePath);
+    if (file.exists()) {
+        m_lastPosition = file.size();
+        qDebug() << "LogReader: Starting from end of file, position:" << m_lastPosition;
+    }
+    
     m_timer->start(interval);
     
     bool wasMonitoring = m_monitoring;
@@ -124,7 +132,7 @@ void LogReader::startMonitoring(int interval)
         emit monitoringChanged();
     }
     
-    // Do initial check (will load all existing entries since m_lastPosition = 0)
+    // Do initial check (will find no new content since we're at end)
     checkLogFile();
 }
 
