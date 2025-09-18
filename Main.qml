@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
 import "styles/Theme.js" as Theme
 import "components"
 
@@ -38,7 +39,7 @@ Window {
         // Window-wide hover detection
         HoverHandler {
             id: mainHoverHandler
-            enabled: !settingsDialog.opened
+            enabled: !settingsWindow.visible
             onHoveredChanged: {
                 if (hovered) {
                     mainWindow.opacity = Theme.window.opacityFocused
@@ -90,7 +91,9 @@ Window {
             ToolTip.delay: 500
             
             onClicked: {
-                settingsDialog.open()
+                settingsWindow.show()
+                settingsWindow.raise()
+                settingsWindow.requestActivate()
             }
         }
         
@@ -166,43 +169,241 @@ Window {
             anchors.rightMargin: Theme.layout.contentSideMargin
             
             contentWidth: -1  // Use ScrollView width
-            contentHeight: contentColumn.height
+            contentHeight: statusIndicator.height
             
             // Hide scroll bars but keep scrolling functionality
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
             StatusIndicator {
+                id: statusIndicator
                 width: parent.width
                 height: parent.height
-            }
-            
-            // Content column with styling examples
-            Column {
-                id: contentColumn
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: Math.min(parent.width - Theme.layout.minContentPadding, Theme.layout.maxContentWidth)
-                spacing: Theme.spacing.s6
-                
             }
         }
     }
     
-    // Settings Dialog
-    SettingsDialog {
-        id: settingsDialog
-        anchors.centerIn: Overlay.overlay
+    // Settings Window (Inline)
+    Window {
+        id: settingsWindow
+        width: 500
+        height: 300
+        title: "Logi Settings"
+        modality: Qt.ApplicationModal
+        flags: Qt.Dialog | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowSystemMenuHint
+        visible: false
         
-        onOpened: {
-            mainWindow.opacity = Theme.window.opacityFocused
-        }
+        color: Theme.colors.background
         
-        onClosed: {
-            // Restore hover-based opacity behavior
-            if (mainHoverHandler.hovered) {
+        onVisibleChanged: {
+            if (visible) {
                 mainWindow.opacity = Theme.window.opacityFocused
             } else {
-                mainWindow.opacity = Theme.window.opacityHidden
+                // Restore hover-based opacity behavior
+                if (mainHoverHandler.hovered) {
+                    mainWindow.opacity = Theme.window.opacityFocused
+                } else {
+                    mainWindow.opacity = Theme.window.opacityHidden
+                }
+            }
+        }
+        
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.colors.background
+            
+            Column {
+                anchors.fill: parent
+                anchors.margins: 24
+                spacing: 20
+                
+                // Header
+                Text {
+                    text: "Settings"
+                    font.pixelSize: Theme.fonts.sizeLG
+                    font.weight: Font.Medium
+                    color: Theme.colors.textPrimary
+                }
+                
+                // Divider
+                Rectangle {
+                    width: parent.width
+                    height: 1
+                    color: Theme.colors.border
+                }
+                
+                // Star Citizen Directory Section
+                Column {
+                    width: parent.width
+                    spacing: 8
+                    
+                    Text {
+                        text: "Star Citizen Installation Directory"
+                        font.pixelSize: Theme.fonts.sizeMD
+                        font.weight: Font.Medium
+                        color: Theme.colors.textPrimary
+                    }
+                    
+                    Text {
+                        text: "Select the directory where Star Citizen is installed (e.g., C:/Program Files/Roberts Space Industries/StarCitizen)"
+                        font.pixelSize: Theme.fonts.sizeSM
+                        color: Theme.colors.textSecondary
+                        wrapMode: Text.WordWrap
+                        width: parent.width
+                    }
+                    
+                    Row {
+                        width: parent.width
+                        spacing: 12
+                        
+                        TextField {
+                            id: pathField
+                            width: parent.width - browseButton.width - parent.spacing - settingsStatusIndicator.width - 12
+                            text: appSettings.starCitizenDirectory
+                            placeholderText: "Enter or browse for directory..."
+                            
+                            background: Rectangle {
+                                color: Theme.colors.surface
+                                border.color: parent.focus ? Theme.colors.accent : Theme.colors.border
+                                border.width: 1
+                                radius: 6
+                            }
+                            
+                            color: Theme.colors.textPrimary
+                            selectionColor: Theme.colors.accent
+                            font.pixelSize: Theme.fonts.sizeMD
+                        }
+                        
+                        Button {
+                            id: browseButton
+                            text: "Browse..."
+                            width: 100
+                            
+                            background: Rectangle {
+                                color: parent.pressed ? Qt.darker(Theme.colors.accent, 1.2) : 
+                                       parent.hovered ? Qt.lighter(Theme.colors.accent, 1.1) : Theme.colors.accent
+                                radius: 6
+                            }
+                            
+                            contentItem: Text {
+                                text: parent.text
+                                color: "white"
+                                font.pixelSize: Theme.fonts.sizeMD
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            
+                            onClicked: {
+                                folderDialog.open()
+                            }
+                        }
+                        
+                        // Status indicator
+                        Rectangle {
+                            id: settingsStatusIndicator
+                            width: 20
+                            height: 20
+                            radius: 10
+                            color: appSettings.isValidStarCitizenDirectory(pathField.text) ? "#10b981" : "#ef4444"
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: pathField.text.length > 0
+                            
+                            Text {
+                                anchors.centerIn: parent
+                                text: appSettings.isValidStarCitizenDirectory(pathField.text) ? "✓" : "✗"
+                                color: "white"
+                                font.pixelSize: 12
+                                font.weight: Font.Bold
+                            }
+                        }
+                    }
+                    
+                    // Validation message
+                    Text {
+                        text: {
+                            if (pathField.text.length === 0) return ""
+                            return appSettings.isValidStarCitizenDirectory(pathField.text) ? 
+                                   "✓ Valid Star Citizen directory found" : 
+                                   "✗ Invalid directory - please select the Star Citizen installation folder"
+                        }
+                        font.pixelSize: Theme.fonts.sizeSM
+                        color: appSettings.isValidStarCitizenDirectory(pathField.text) ? "#10b981" : "#ef4444"
+                        visible: pathField.text.length > 0
+                        wrapMode: Text.WordWrap
+                        width: parent.width
+                    }
+                }
+                
+                Item { height: 20 } // Spacer
+                
+                // Action buttons
+                Row {
+                    anchors.right: parent.right
+                    spacing: 12
+                    
+                    Button {
+                        text: "Cancel"
+                        width: 80
+                        
+                        background: Rectangle {
+                            color: parent.pressed ? Qt.darker(Theme.colors.surface, 1.1) : 
+                                   parent.hovered ? Qt.lighter(Theme.colors.surface, 1.1) : Theme.colors.surface
+                            border.color: Theme.colors.border
+                            border.width: 1
+                            radius: 6
+                        }
+                        
+                        contentItem: Text {
+                            text: parent.text
+                            color: Theme.colors.textPrimary
+                            font.pixelSize: Theme.fonts.sizeMD
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        
+                        onClicked: {
+                            // Revert changes
+                            pathField.text = appSettings.starCitizenDirectory
+                            settingsWindow.close()
+                        }
+                    }
+                    
+                    Button {
+                        text: "Save"
+                        width: 80
+                        
+                        background: Rectangle {
+                            color: parent.pressed ? Qt.darker(Theme.colors.accent, 1.2) : 
+                                   parent.hovered ? Qt.lighter(Theme.colors.accent, 1.1) : Theme.colors.accent
+                            radius: 6
+                        }
+                        
+                        contentItem: Text {
+                            text: parent.text
+                            color: "white"
+                            font.pixelSize: Theme.fonts.sizeMD
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        
+                        onClicked: {
+                            appSettings.setStarCitizenDirectory(pathField.text)
+                            appSettings.saveSettings()
+                            settingsWindow.close()
+                        }
+                    }
+                }
+            }
+        }
+        
+        FolderDialog {
+            id: folderDialog
+            title: "Select Star Citizen Installation Directory"
+            currentFolder: pathField.text.length > 0 ? "file:///" + pathField.text : "file:///C:/"
+            
+            onAccepted: {
+                var path = selectedFolder.toString().replace("file:///", "")
+                pathField.text = path
             }
         }
     }

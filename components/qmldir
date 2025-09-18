@@ -1,0 +1,9 @@
+module components
+
+CustomTitleBar 1.0 CustomTitleBar.qml
+LogEntryViewer 1.0 LogEntryViewer.qml
+ResizeHandles 1.0 ResizeHandles.qml
+SettingsDialog 1.0 SettingsDialog.qml
+SettingsWindow 1.0 SettingsWindow.qml
+StatusIndicator 1.0 StatusIndicator.qml
+ThemedScrollBar 1.0 ThemedScrollBar.qml
