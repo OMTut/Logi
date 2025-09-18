@@ -87,7 +87,22 @@ const layout = {
     
     // Content constraints
     maxContentWidth: 400,
-    minContentPadding: spacing.s8
+    minContentPadding: spacing.s8,
+    
+    // Log Viewer Layout Controls
+    logViewer: {
+        // Height calculation: reserve space for status indicators
+        statusIndicatorReservedHeight: 120, // Space for game status + log file status + path label + spacing
+        minHeight: 200, // Minimum log viewer height
+        
+        // Width calculation: full width minus margins
+        // Actual width = parent.width (already handled by anchoring)
+        
+        // Helper function to calculate dynamic height
+        calculateHeight: function(parentHeight) {
+            return Math.max(this.minHeight, parentHeight - this.statusIndicatorReservedHeight)
+        }
+    }
 };
 
 // Component Specific Styles

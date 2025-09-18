@@ -172,7 +172,10 @@ Window {
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
-            StatusIndicator {}
+            StatusIndicator {
+                width: parent.width
+                height: parent.height
+            }
             
             // Content column with styling examples
             Column {

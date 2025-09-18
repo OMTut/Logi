@@ -5,7 +5,7 @@ import "../styles/Theme.js" as Theme
 Rectangle {
     id: root
     // Remove fixed dimensions - let parent control sizing
-    color: Theme.colors.background
+    color: Theme.colors.scDarkBlue
     border.color: Theme.colors.border
     border.width: 0
     radius: 0

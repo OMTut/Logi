@@ -103,6 +103,6 @@ Column {
     LogEntryViewer {
         id: logViewer
         width: parent.width
-        height: 300 // Fixed height for now, could be made relative too
+        height: Math.max(200, mainWindow.height * 0.9) // 60% of window height, minimum 200px
     }
 }
