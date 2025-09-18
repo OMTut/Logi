@@ -10,6 +10,12 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     
+    // Set application metadata for QSettings
+    app.setApplicationName("Logi");
+    app.setApplicationVersion("1.0");
+    app.setOrganizationName("LogiApp");
+    app.setOrganizationDomain("logi.app");
+    
     // Set Qt Quick Controls style to Basic to allow customization
     QQuickStyle::setStyle("Basic");
 

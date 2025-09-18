@@ -30,13 +30,20 @@ void Settings::setStarCitizenDirectory(const QString &path)
 
 void Settings::saveSettings()
 {
+    qDebug() << "Settings: Saving starCitizenDirectory:" << m_starCitizenDirectory;
     m_settings->setValue("starCitizenDirectory", m_starCitizenDirectory);
     m_settings->sync();
-    qDebug() << "Settings: Settings saved to registry/config";
+    
+    // Debug: Show where settings are being saved
+    qDebug() << "Settings: Settings saved to:" << m_settings->fileName();
+    qDebug() << "Settings: Sync status:" << (m_settings->status() == QSettings::NoError ? "Success" : "Error");
 }
 
 void Settings::loadSettings()
 {
+    // Debug: Show where settings are being loaded from
+    qDebug() << "Settings: Loading from:" << m_settings->fileName();
+    
     m_starCitizenDirectory = m_settings->value("starCitizenDirectory", m_starCitizenDirectory).toString();
     
     qDebug() << "Settings: Settings loaded - starCitizenDirectory:" << m_starCitizenDirectory;
