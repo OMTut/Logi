@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Logi Application</DisplayName>
+    <Description>Star Citizen log monitoring and analysis tool</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2025-01-19</ReleaseDate>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>
+    <Essential>true</Essential>
+    <ForcedInstallation>true</ForcedInstallation>
+    <SortingPriority>100</SortingPriority>
+    
+    <!-- Dependencies -->
+    <Dependencies></Dependencies>
+    
+    <!-- Installation size estimate (in bytes) -->
+    <UncompressedSize>50000000</UncompressedSize>
+</Package>

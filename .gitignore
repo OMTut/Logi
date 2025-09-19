@@ -81,3 +81,8 @@ CMakeLists.txt.user*
 .uic/
 build/
 dist/
+
+# Installer generated files
+# Keep config and meta, ignore data and output
+installer/packages/*/data/
+installer/output/
