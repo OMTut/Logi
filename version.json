@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "build": 1,
+  "release_date": "2025-09-19",
+  "download_url": "https://github.com/omtut/Logi/releases/download/v0.1.0/LogiSetup.exe",
+  "release_notes_url": "https://github.com/omtut/Logi/releases/tag/v0.1.0",
+  "changelog": [
+    "Initial release",
+    "Actor death log monitoring",
+    "Settings persistence"
+  ],
+  "minimum_os": "Windows 10",
+  "file_size": 60483540,
+  "checksum": {
+    "sha256": "placeholder_checksum_will_be_updated_when_release_is_built"
+  },
+  "update_required": false,
+  "update_message": "Initial build and release for testing."
+}
