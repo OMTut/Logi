@@ -5,6 +5,7 @@
 #include "src/ProcessChecker.h"
 #include "src/Settings.h"
 #include "src/LogReader.h"
+#include "src/UpdateChecker.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +13,7 @@ int main(int argc, char *argv[])
     
     // Set application metadata for QSettings
     app.setApplicationName("Logi");
-    app.setApplicationVersion("1.0");
+    app.setApplicationVersion("0.1.0");
     app.setOrganizationName("LogiApp");
     app.setOrganizationDomain("logi.app");
     
@@ -32,6 +33,10 @@ int main(int argc, char *argv[])
     // Create LogReader instance and expose it to QML as a context property
     LogReader logReader;
     engine.rootContext()->setContextProperty("logReader", &logReader);
+    
+    // Create UpdateChecker instance and expose it to QML as a context property
+    UpdateChecker updateChecker;
+    engine.rootContext()->setContextProperty("updateChecker", &updateChecker);
     
     // Connect settings to log reader for automatic log file discovery
     QObject::connect(&settings, &Settings::starCitizenDirectoryChanged, [&]() {

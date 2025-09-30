@@ -4,7 +4,7 @@ project(Logi VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Network)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -13,6 +13,7 @@ qt_add_executable(appLogi
     src/ProcessChecker.cpp
     src/Settings.cpp
     src/LogReader.cpp
+    src/UpdateChecker.cpp
 )
 
 qt_add_qml_module(appLogi
@@ -42,7 +43,7 @@ set_target_properties(appLogi PROPERTIES
 )
 
 target_link_libraries(appLogi
-    PRIVATE Qt6::Quick Qt6::QuickControls2
+    PRIVATE Qt6::Quick Qt6::QuickControls2 Qt6::Network
 )
 
 include(GNUInstallDirs)

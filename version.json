@@ -1,9 +1,9 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "build": 1,
   "release_date": "2025-09-19",
-  "download_url": "https://github.com/OMTut/Logi/releases/download/v0.1.0/LogiSetup.exe",
-  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v0.1.0",
+  "download_url": "https://github.com/OMTut/Logi/releases/download/v0.1.1/LogiSetup.exe",
+  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v0.1.1",
   "changelog": [
     "Initial release",
     "Actor death log monitoring",
@@ -15,5 +15,5 @@
     "sha256": "placeholder_checksum_will_be_updated_when_release_is_built"
   },
   "update_required": false,
-  "update_message": "Initial build and release for testing."
+  "update_message": "Test update - update system working!"
 }

@@ -61,6 +61,122 @@ Window {
             showOpacity: true
         }
         
+        // Update notification banner
+        Rectangle {
+            id: updateBanner
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: Theme.layout.titleBarHeight
+            height: updateChecker.updateAvailable ? 50 : 0
+            visible: updateChecker.updateAvailable
+            color: updateChecker.updateRequired ? "#dc2626" : Theme.colors.accent
+            z: 10
+            
+            Behavior on height {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
+            
+            Row {
+                anchors.fill: parent
+                anchors.margins: 12
+                spacing: 12
+                
+                // Update icon
+                Text {
+                    text: updateChecker.updateRequired ? "⚠" : "↗"
+                    color: "white"
+                    font.pixelSize: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                
+                // Update message
+                Column {
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 2
+                    
+                    Text {
+                        text: updateChecker.updateRequired ? 
+                              "Required Update Available" : "Update Available"
+                        color: "white"
+                        font.pixelSize: Theme.fonts.sizeMD
+                        font.weight: Font.Medium
+                    }
+                    
+                    Text {
+                        text: "Version " + updateChecker.latestVersion + " - " + updateChecker.updateMessage
+                        color: "white"
+                        font.pixelSize: Theme.fonts.sizeSM
+                        opacity: 0.9
+                    }
+                }
+                
+                // Spacer
+                Item {
+                    width: parent.width - updateButton.width - releaseNotesButton.width - parent.spacing * 3 - 40
+                }
+                
+                // Release Notes button
+                Button {
+                    id: releaseNotesButton
+                    text: "Release Notes"
+                    width: 100
+                    height: 26
+                    anchors.verticalCenter: parent.verticalCenter
+                    
+                    background: Rectangle {
+                        color: parent.pressed ? Qt.darker("white", 1.3) :
+                               parent.hovered ? Qt.lighter("white", 1.1) : "white"
+                        opacity: parent.hovered ? 0.9 : 0.8
+                        radius: 4
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: updateChecker.updateRequired ? "#dc2626" : Theme.colors.accent
+                        font.pixelSize: Theme.fonts.sizeSM
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    
+                    onClicked: {
+                        updateChecker.openReleaseNotes()
+                    }
+                }
+                
+                // Update button
+                Button {
+                    id: updateButton
+                    text: "Download Update"
+                    width: 120
+                    height: 26
+                    anchors.verticalCenter: parent.verticalCenter
+                    
+                    background: Rectangle {
+                        color: parent.pressed ? Qt.darker("white", 1.3) :
+                               parent.hovered ? Qt.lighter("white", 1.1) : "white"
+                        radius: 4
+                    }
+                    
+                    contentItem: Text {
+                        text: parent.text
+                        color: updateChecker.updateRequired ? "#dc2626" : Theme.colors.accent
+                        font.pixelSize: Theme.fonts.sizeSM
+                        font.weight: Font.Medium
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    
+                    onClicked: {
+                        updateChecker.downloadUpdate()
+                    }
+                }
+            }
+        }
+        
         // Settings button overlay on top of title bar
         Button {
             id: settingsButton
@@ -157,16 +273,23 @@ Window {
         }
         
         
-        // Scrollable content area that avoids title bar
+        // Scrollable content area that avoids title bar and update banner
         ScrollView {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.topMargin: Theme.layout.contentTopMargin
+            anchors.topMargin: Theme.layout.contentTopMargin + (updateChecker.updateAvailable ? updateBanner.height : 0)
             anchors.bottomMargin: Theme.layout.contentBottomMargin
             anchors.leftMargin: Theme.layout.contentSideMargin
             anchors.rightMargin: Theme.layout.contentSideMargin
+            
+            Behavior on anchors.topMargin {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
             
             contentWidth: -1  // Use ScrollView width
             contentHeight: statusIndicator.height
@@ -181,6 +304,12 @@ Window {
                 height: parent.height
             }
         }
+    }
+    
+    // Auto-check for updates when app starts
+    Component.onCompleted: {
+        // Delay the check slightly to let the app finish loading
+        Qt.callLater(updateChecker.checkForUpdates)
     }
     
     // Settings Window (Inline)
@@ -331,6 +460,73 @@ Window {
                         visible: pathField.text.length > 0
                         wrapMode: Text.WordWrap
                         width: parent.width
+                    }
+                }
+                
+                // Updates Section
+                Column {
+                    width: parent.width
+                    spacing: 8
+                    
+                    Text {
+                        text: "Updates"
+                        font.pixelSize: Theme.fonts.sizeMD
+                        font.weight: Font.Medium
+                        color: Theme.colors.textPrimary
+                    }
+                    
+                    Row {
+                        width: parent.width
+                        spacing: 12
+                        
+                        Column {
+                            spacing: 4
+                            width: parent.width - checkUpdatesButton.width - parent.spacing
+                            
+                            Text {
+                                text: "Current Version: " + updateChecker.getCurrentVersion()
+                                font.pixelSize: Theme.fonts.sizeSM
+                                color: Theme.colors.textSecondary
+                            }
+                            
+                            Text {
+                                text: updateChecker.updateAvailable ? 
+                                      "Update available: " + updateChecker.latestVersion :
+                                      updateChecker.isChecking ? "Checking for updates..." : 
+                                      "You're up to date!"
+                                font.pixelSize: Theme.fonts.sizeSM
+                                color: updateChecker.updateAvailable ? Theme.colors.accent : Theme.colors.textSecondary
+                                visible: !updateChecker.isChecking || updateChecker.updateAvailable
+                            }
+                        }
+                        
+                        Button {
+                            id: checkUpdatesButton
+                            text: updateChecker.isChecking ? "Checking..." : "Check for Updates"
+                            width: 140
+                            height: 32
+                            enabled: !updateChecker.isChecking
+                            anchors.verticalCenter: parent.verticalCenter
+                            
+                            background: Rectangle {
+                                color: parent.pressed ? Qt.darker(Theme.colors.accent, 1.2) : 
+                                       parent.hovered ? Qt.lighter(Theme.colors.accent, 1.1) : Theme.colors.accent
+                                opacity: parent.enabled ? 1.0 : 0.6
+                                radius: 6
+                            }
+                            
+                            contentItem: Text {
+                                text: parent.text
+                                color: "white"
+                                font.pixelSize: Theme.fonts.sizeMD
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            
+                            onClicked: {
+                                updateChecker.checkForUpdates()
+                            }
+                        }
                     }
                 }
                 
