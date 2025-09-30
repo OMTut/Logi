@@ -25,7 +25,10 @@ qt_add_qml_module(appLogi
         components/ResizeHandles.qml
         components/StatusIndicator.qml
         components/SettingsDialog.qml
+        components/SettingsWindow.qml
         components/LogEntryViewer.qml
+        components/UpdateBanner.qml
+        components/ResizeCorner.qml
 
     RESOURCES
         styles/Theme.js
