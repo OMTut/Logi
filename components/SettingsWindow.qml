@@ -18,11 +18,10 @@ Window {
     property alias starCitizenDirectory: pathField.text
     
     // Properties for external objects  
-    property var updateChecker
     property var mainWindow
     property var mainHoverHandler
     
-    // Note: appSettings is a global context property from C++, not passed as a parameter
+    // Note: appSettings and updateChecker are global context properties from C++, not passed as parameters
     
     signal settingsChanged()
     
@@ -239,7 +238,15 @@ Window {
                     
                     Button {
                         id: checkUpdatesButton
-                        text: (updateChecker && updateChecker.isChecking) ? "Checking..." : "Check for Updates"
+                        text: {
+                            if (updateChecker && updateChecker.isChecking) {
+                                return "Checking..."
+                            } else if (updateChecker && updateChecker.updateAvailable) {
+                                return "Download Update"
+                            } else {
+                                return "Check for Updates"
+                            }
+                        }
                         width: 140
                         height: 32
                         enabled: !updateChecker || !updateChecker.isChecking
@@ -262,7 +269,13 @@ Window {
                         
                         onClicked: {
                             if (updateChecker) {
-                                updateChecker.checkForUpdates()
+                                if (updateChecker.updateAvailable) {
+                                    // Download the update
+                                    updateChecker.downloadUpdate()
+                                } else {
+                                    // Check for updates
+                                    updateChecker.checkForUpdates()
+                                }
                             }
                         }
                     }

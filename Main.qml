@@ -166,7 +166,6 @@ Window {
     // Settings Window
     SettingsWindow {
         id: settingsWindow
-        updateChecker: updateChecker
         mainWindow: mainWindow
         mainHoverHandler: mainHoverHandler
     }
