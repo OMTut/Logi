@@ -8,16 +8,24 @@ Rectangle {
     // Safe computed properties to avoid undefined assignment
     property bool isUpdateAvailable: updateChecker ? (updateChecker.updateAvailable || false) : false
     property bool isUpdateRequired: updateChecker ? (updateChecker.updateRequired || false) : false
+    property bool isDismissed: false
     
-    // Auto-sizing based on update availability
-    height: isUpdateAvailable ? 50 : 0
-    visible: isUpdateAvailable
+    // Auto-sizing based on update availability and dismiss state
+    height: (isUpdateAvailable && !isDismissed) ? 50 : 0
+    visible: (isUpdateAvailable && !isDismissed)
     color: isUpdateRequired ? "#dc2626" : Theme.colors.accent
     
     Behavior on height {
         NumberAnimation {
             duration: 200
             easing.type: Easing.OutCubic
+        }
+    }
+    
+    // Reset dismissed state when update status changes
+    onIsUpdateAvailableChanged: {
+        if (isUpdateAvailable) {
+            isDismissed = false
         }
     }
     
@@ -42,7 +50,7 @@ Rectangle {
         
         // Update message
         Column {
-            width: parent.width - updateIcon.width - updateButton.width - releaseNotesButton.width - parent.spacing * 4 - 20
+            width: parent.width - updateIcon.width - updateButton.width - releaseNotesButton.width - (isUpdateRequired ? 0 : (closeButton.width + 16)) - parent.spacing * 4 - 20
             anchors.verticalCenter: parent.verticalCenter
             spacing: 2
             
@@ -121,5 +129,41 @@ Rectangle {
                 }
             }
         }
+    }
+    
+    // Close button (only for optional updates) - positioned to align with title bar
+    Button {
+        id: closeButton
+        text: "×"
+        width: 24  // Match title bar close button size
+        height: 24
+        visible: !isUpdateRequired
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.rightMargin: 8  // Match title bar's Theme.spacing.s2
+        
+        background: Rectangle {
+            color: parent.pressed ? Qt.darker("white", 1.3) :
+                   parent.hovered ? Qt.lighter("white", 1.1) : "transparent"
+            opacity: parent.hovered ? 0.9 : 0.6
+            radius: 4  // Match title bar radius
+        }
+        
+        contentItem: Text {
+            text: parent.text
+            color: "white"
+            font.pixelSize: 16  // Match title bar font size
+            font.weight: Font.Bold
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+        
+        onClicked: {
+            root.isDismissed = true
+        }
+        
+        ToolTip.visible: hovered
+        ToolTip.text: "Dismiss update notification"
+        ToolTip.delay: 500
     }
 }

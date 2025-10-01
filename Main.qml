@@ -69,8 +69,8 @@ Window {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.topMargin: 5  // Add space between title bar and banner
-            height: updateChecker.updateAvailable ? 50 : 0
-
+            height: updateBanner.height
+            color: "transparent"
             
             Behavior on height {
                 NumberAnimation {
@@ -81,7 +81,9 @@ Window {
             
             UpdateBanner {
                 id: updateBanner
-                anchors.fill: parent
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
             }
         }
         
