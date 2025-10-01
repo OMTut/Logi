@@ -45,6 +45,11 @@ set_target_properties(appLogi PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+# Define PROJECT_VERSION as a compile-time definition
+target_compile_definitions(appLogi PRIVATE 
+    PROJECT_VERSION="${PROJECT_VERSION}"
+)
+
 target_link_libraries(appLogi
     PRIVATE Qt6::Quick Qt6::QuickControls2 Qt6::Network
 )

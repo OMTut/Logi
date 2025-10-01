@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     
     // Set application metadata for QSettings
     app.setApplicationName("Logi");
-    app.setApplicationVersion("0.1.0");
+    app.setApplicationVersion(PROJECT_VERSION);
     app.setOrganizationName("LogiApp");
     app.setOrganizationDomain("logi.app");
     
