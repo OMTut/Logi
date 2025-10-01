@@ -19,6 +19,9 @@
     <!-- Maintenance tool (for updates and uninstall) -->
     <MaintenanceToolName>LogiMaintenanceTool</MaintenanceToolName>
     
+    <!-- Prevent removal of parent directories during uninstall -->
+    <RemoveTargetDir>false</RemoveTargetDir>
+    
     <!-- Start menu and desktop shortcuts -->
     <CreateLocalRepository>false</CreateLocalRepository>
     

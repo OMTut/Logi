@@ -3,6 +3,24 @@ function Component()
     // Constructor
 }
 
+Component.prototype.beginInstallation = function()
+{
+    // This is called right before installation begins - last chance to modify target directory
+    var targetDir = installer.value("TargetDir");
+    console.log("Original target directory in beginInstallation: " + targetDir);
+    
+    if (!targetDir.match(/[\\/]Logi$/i)) {
+        targetDir = targetDir.replace(/[\\/]+$/, "");
+        if (targetDir.indexOf("\\") !== -1) {
+            targetDir += "\\Logi";
+        } else {
+            targetDir += "/Logi";
+        }
+        installer.setValue("TargetDir", targetDir);
+        console.log("Modified target directory in beginInstallation: " + targetDir);
+    }
+}
+
 Component.prototype.createOperations = function()
 {
     // Call default implementation
