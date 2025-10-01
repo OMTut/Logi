@@ -11,18 +11,18 @@ Component.prototype.createOperations = function()
     if (systemInfo.productType === "windows") {
         // Create desktop shortcut
         component.addOperation("CreateShortcut", 
-                             "@TargetDir@/appLogi.exe", 
+                             "@TargetDir@/Logi.exe", 
                              "@DesktopDir@/Logi.lnk",
                              "workingDirectory=@TargetDir@",
-                             "iconPath=@TargetDir@/appLogi.exe",
+                             "iconPath=@TargetDir@/Logi.exe",
                              "description=Star Citizen Log Monitor");
         
         // Create start menu shortcut
         component.addOperation("CreateShortcut", 
-                             "@TargetDir@/appLogi.exe", 
+                             "@TargetDir@/Logi.exe", 
                              "@StartMenuDir@/Logi.lnk",
                              "workingDirectory=@TargetDir@",
-                             "iconPath=@TargetDir@/appLogi.exe", 
+                             "iconPath=@TargetDir@/Logi.exe", 
                              "description=Star Citizen Log Monitor");
     }
 }
@@ -37,7 +37,7 @@ Component.prototype.installationFinished = function()
     message += "You can now launch Logi from:\n";
     message += "• Desktop shortcut\n";
     message += "• Start menu\n";
-    message += "• " + installer.value("TargetDir") + "/appLogi.exe";
+    message += "• " + installer.value("TargetDir") + "/Logi.exe";
     
     installer.setValue("FinishedText", message);
 }
