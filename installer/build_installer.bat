@@ -4,8 +4,8 @@ echo Building Logi Installer...
 REM Set paths
 set QT_IFW_PATH=C:\Qt\Tools\QtInstallerFramework\4.10\bin
 set SOURCE_DIR=%~dp0..
-set BUILD_DIR=%SOURCE_DIR%\build\Desktop_Qt_6_9_2_MinGW_64_bit-Release
-set DIST_DIR=%SOURCE_DIR%\dist
+set BUILD_DIR=%SOURCE_DIR%\build
+set DIST_DIR=%SOURCE_DIR%\release
 set INSTALLER_DIR=%~dp0
 set DATA_DIR=%INSTALLER_DIR%\packages\com.logi.logi\data
 set OUTPUT_DIR=%INSTALLER_DIR%\output
