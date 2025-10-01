@@ -28,6 +28,23 @@ Column {
         }
     }
     
+    // Connect to ProcessChecker to re-check log file when game starts/stops
+    Connections {
+        target: processChecker
+        function onGameRunningChanged() {
+            if (processChecker.isGameRunning && appSettings.starCitizenDirectory) {
+                // Game just started - re-check log file in case it was just created
+                console.log("StatusIndicator: Game started, re-checking log file...")
+                Qt.callLater(function() {
+                    logReader.findLogFile(appSettings.starCitizenDirectory)
+                    if (logReader.logFileExists && !logReader.monitoring) {
+                        logReader.startMonitoring(1000)
+                    }
+                })
+            }
+        }
+    }
+    
     
     Component.onCompleted: {
         console.log("StatusIndicator: Starting Star Citizen monitoring...")
@@ -38,6 +55,28 @@ Column {
             logReader.findLogFile(appSettings.starCitizenDirectory)
             if (logReader.logFileExists) {
                 logReader.startMonitoring(1000)
+            }
+        }
+        
+        // Start periodic re-check timer for better robustness
+        logFileRecheckTimer.start()
+    }
+    
+    // Timer to periodically re-check log file availability (every 10 seconds)
+    Timer {
+        id: logFileRecheckTimer
+        interval: 10000 // 10 seconds
+        repeat: true
+        running: false
+        
+        onTriggered: {
+            // Only re-check if we don't have a log file but have a directory configured
+            if (appSettings.starCitizenDirectory && !logReader.logFileExists) {
+                console.log("StatusIndicator: Periodic re-check for log file...")
+                logReader.findLogFile(appSettings.starCitizenDirectory)
+                if (logReader.logFileExists) {
+                    logReader.startMonitoring(1000)
+                }
             }
         }
     }
