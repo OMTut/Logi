@@ -5,8 +5,6 @@ import "../styles/Theme.js" as Theme
 Rectangle {
     id: root
     
-    // Note: updateChecker is a global context property from C++, no need to pass it
-    
     // Safe computed properties to avoid undefined assignment
     property bool isUpdateAvailable: updateChecker ? (updateChecker.updateAvailable || false) : false
     property bool isUpdateRequired: updateChecker ? (updateChecker.updateRequired || false) : false

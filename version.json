@@ -14,6 +14,6 @@
   "checksum": {
     "sha256": "placeholder_checksum_will_be_updated_when_release_is_built"
   },
-  "update_required": false,
+  "update_required": true,
   "update_message": "Test update - update system working!"
 }
