@@ -22,15 +22,18 @@ Rectangle {
     }
     
     Row {
-        anchors.fill: parent
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
+        id: contentRow
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.leftMargin: 8
+        anchors.rightMargin: 8
         anchors.topMargin: 8
-        anchors.bottomMargin: 8
         spacing: 12
         
         // Update icon
         Text {
+            id: updateIcon
             text: isUpdateRequired ? "⚠" : "↗"
             color: "white"
             font.pixelSize: 16
@@ -39,6 +42,7 @@ Rectangle {
         
         // Update message
         Column {
+            width: parent.width - updateIcon.width - updateButton.width - releaseNotesButton.width - parent.spacing * 4 - 20
             anchors.verticalCenter: parent.verticalCenter
             spacing: 2
             
@@ -51,16 +55,11 @@ Rectangle {
             
             Text {
                 text: updateChecker ? 
-                      "Version " + updateChecker.latestVersion + " - " + updateChecker.updateMessage : ""
+                      "Version " + updateChecker.latestVersion : ""
                 color: "white"
                 font.pixelSize: Theme.fonts.sizeSM
                 opacity: 0.9
             }
-        }
-        
-        // Spacer
-        Item {
-            width: parent.width - updateButton.width - releaseNotesButton.width - parent.spacing * 3 - 40
         }
         
         // Release Notes button

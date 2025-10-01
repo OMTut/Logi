@@ -140,6 +140,10 @@ Window {
             anchors.bottomMargin: Theme.layout.contentBottomMargin
             anchors.leftMargin: Theme.layout.contentSideMargin
             anchors.rightMargin: Theme.layout.contentSideMargin
+
+            // Hide/disable main content when a required update is present
+            visible: !updateChecker.updateRequired
+            enabled: !updateChecker.updateRequired
             
             contentWidth: -1  // Use ScrollView width
             contentHeight: statusIndicator.height
@@ -152,6 +156,46 @@ Window {
                 id: statusIndicator
                 width: parent.width
                 height: parent.height
+            }
+        }
+        
+        // Message displayed when app is blocked due to required update
+        Rectangle {
+            anchors.top: updateBannerWrapper.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.topMargin: Theme.layout.contentSideMargin
+            anchors.leftMargin: Theme.layout.contentSideMargin
+            anchors.rightMargin: Theme.layout.contentSideMargin
+            
+            visible: updateChecker.updateRequired
+            color: "transparent"
+            
+            Column {
+                anchors.centerIn: parent
+                spacing: 16
+                
+
+                
+                Text {
+                    text: "App Functionality Disabled"
+                    font.pixelSize: Theme.fonts.sizeLG
+                    font.weight: Font.Bold
+                    color: Theme.colors.textPrimary
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                
+                Text {
+                    text: "A required update is available. Please update to continue using Logi."
+                    font.pixelSize: Theme.fonts.sizeMD
+                    color: Theme.colors.textSecondary
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+                    width: Math.min(400, parent.parent.width - 40)
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
     }
