@@ -82,7 +82,6 @@ Window {
             UpdateBanner {
                 id: updateBanner
                 anchors.fill: parent
-                updateChecker: updateChecker
             }
         }
         

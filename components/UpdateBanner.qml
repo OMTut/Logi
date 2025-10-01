@@ -5,19 +5,16 @@ import "../styles/Theme.js" as Theme
 Rectangle {
     id: root
     
-    // Properties that can be set from parent
-    property alias updateChecker: internal.updateChecker
+    // Note: updateChecker is a global context property from C++, no need to pass it
     
-    // Internal object to hold the updateChecker reference
-    QtObject {
-        id: internal
-        property var updateChecker
-    }
+    // Safe computed properties to avoid undefined assignment
+    property bool isUpdateAvailable: updateChecker ? (updateChecker.updateAvailable || false) : false
+    property bool isUpdateRequired: updateChecker ? (updateChecker.updateRequired || false) : false
     
     // Auto-sizing based on update availability
-    height: (internal.updateChecker && internal.updateChecker.updateAvailable) ? 50 : 0
-    visible: (internal.updateChecker && internal.updateChecker.updateAvailable)
-    color: (internal.updateChecker && internal.updateChecker.updateRequired) ? "#dc2626" : Theme.colors.accent
+    height: isUpdateAvailable ? 50 : 0
+    visible: isUpdateAvailable
+    color: isUpdateRequired ? "#dc2626" : Theme.colors.accent
     
     Behavior on height {
         NumberAnimation {
@@ -36,7 +33,7 @@ Rectangle {
         
         // Update icon
         Text {
-            text: (internal.updateChecker && internal.updateChecker.updateRequired) ? "⚠" : "↗"
+            text: isUpdateRequired ? "⚠" : "↗"
             color: "white"
             font.pixelSize: 16
             anchors.verticalCenter: parent.verticalCenter
@@ -48,16 +45,15 @@ Rectangle {
             spacing: 2
             
             Text {
-                text: (internal.updateChecker && internal.updateChecker.updateRequired) ? 
-                      "Required Update Available" : "Update Available"
+                text: isUpdateRequired ? "Required Update Available" : "Update Available"
                 color: "white"
                 font.pixelSize: Theme.fonts.sizeMD
                 font.weight: Font.Medium
             }
             
             Text {
-                text: internal.updateChecker ? 
-                      "Version " + internal.updateChecker.latestVersion + " - " + internal.updateChecker.updateMessage : ""
+                text: updateChecker ? 
+                      "Version " + updateChecker.latestVersion + " - " + updateChecker.updateMessage : ""
                 color: "white"
                 font.pixelSize: Theme.fonts.sizeSM
                 opacity: 0.9
@@ -86,15 +82,15 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                color: (internal.updateChecker && internal.updateChecker.updateRequired) ? "#dc2626" : Theme.colors.accent
+                color: isUpdateRequired ? "#dc2626" : Theme.colors.accent
                 font.pixelSize: Theme.fonts.sizeSM
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
             
             onClicked: {
-                if (internal.updateChecker) {
-                    internal.updateChecker.openReleaseNotes()
+                if (updateChecker) {
+                    updateChecker.openReleaseNotes()
                 }
             }
         }
@@ -115,7 +111,7 @@ Rectangle {
             
             contentItem: Text {
                 text: parent.text
-                color: (internal.updateChecker && internal.updateChecker.updateRequired) ? "#dc2626" : Theme.colors.accent
+                color: isUpdateRequired ? "#dc2626" : Theme.colors.accent
                 font.pixelSize: Theme.fonts.sizeSM
                 font.weight: Font.Medium
                 horizontalAlignment: Text.AlignHCenter
@@ -123,8 +119,8 @@ Rectangle {
             }
             
             onClicked: {
-                if (internal.updateChecker) {
-                    internal.updateChecker.downloadUpdate()
+                if (updateChecker) {
+                    updateChecker.downloadUpdate()
                 }
             }
         }
