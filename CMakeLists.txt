@@ -49,6 +49,10 @@ target_link_libraries(appLogi
     PRIVATE Qt6::Quick Qt6::QuickControls2 Qt6::Network
 )
 
+# Testing support
+enable_testing()
+add_subdirectory(tests)
+
 include(GNUInstallDirs)
 install(TARGETS appLogi
     BUNDLE DESTINATION .

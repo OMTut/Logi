@@ -36,9 +36,10 @@ void UpdateChecker::checkForUpdates()
     setIsChecking(true);
     setUpdateAvailable(false);
 
-    qDebug() << "Checking for updates from:" << VERSION_CHECK_URL;
+    QString url = m_customUrl.isEmpty() ? VERSION_CHECK_URL : m_customUrl;
+    qDebug() << "Checking for updates from:" << url;
 
-    QNetworkRequest request{QUrl(VERSION_CHECK_URL)};
+    QNetworkRequest request{QUrl(url)};
     request.setHeader(QNetworkRequest::UserAgentHeader, 
                      QString("Logi/%1").arg(getCurrentVersion()));
     
@@ -233,4 +234,9 @@ void UpdateChecker::setIsChecking(bool checking)
         m_isChecking = checking;
         emit isCheckingChanged();
     }
+}
+
+void UpdateChecker::setVersionCheckUrl(const QString &url)
+{
+    m_customUrl = url;
 }

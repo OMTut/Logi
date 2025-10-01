@@ -41,6 +41,9 @@ public:
     Q_INVOKABLE void downloadUpdate();
     Q_INVOKABLE void openReleaseNotes();
     Q_INVOKABLE QString getCurrentVersion() const;
+    
+    // Testing support
+    void setVersionCheckUrl(const QString &url);
 
 signals:
     void updateAvailableChanged();
@@ -81,6 +84,7 @@ private:
     // Configuration
     static const QString VERSION_CHECK_URL;
     static const int CHECK_TIMEOUT_MS;
+    QString m_customUrl; // For testing
 };
 
 #endif // UPDATECHECKER_H
