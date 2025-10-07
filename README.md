@@ -107,6 +107,25 @@ The app uses a centralized theming approach with `Theme.js` containing:
 - **Star Citizen Community** - For inspiration and feedback
 - **Cloud Imperium Games** - For creating the Star Citizen universe
 
+## Changelog
+
+### v1.0.1 (Latest)
+- Added application icon and branding
+- Improved installer with proper icon support
+- Created Release Prep scripts to automate parts of the deployment process
+
+### v1.0.0 (Initial Release)
+- Real-time Star Citizen log monitoring
+- Death event tracking and display
+- Always-on-top overlay with dynamic opacity
+- Automatic update checking system
+- Game process detection
+- Settings panel for Star Citizen directory configuration
+- Custom draggable title bar with controls
+- Resizable overlay window
+- Scrollable log viewer
+- Required update enforcement
+
 ## License
 
 This project is open source and available under the MIT License.
