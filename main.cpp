@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QQmlContext>
+#include <QIcon>
 #include "src/ProcessChecker.h"
 #include "src/Settings.h"
 #include "src/LogReader.h"
@@ -16,6 +17,9 @@ int main(int argc, char *argv[])
     app.setApplicationVersion(PROJECT_VERSION);
     app.setOrganizationName("LogiApp");
     app.setOrganizationDomain("logi.app");
+    
+    // Set application icon
+    app.setWindowIcon(QIcon(":/resources/Logo_Logi_v1_desktop.ico"));
     
     // Set Qt Quick Controls style to Basic to allow customization
     QQuickStyle::setStyle("Basic");

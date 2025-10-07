@@ -32,7 +32,7 @@ Component.prototype.createOperations = function()
                              "@TargetDir@/Logi.exe", 
                              "@DesktopDir@/Logi.lnk",
                              "workingDirectory=@TargetDir@",
-                             "iconPath=@TargetDir@/Logi.exe",
+                             "iconPath=@TargetDir@/Logo_Logi_v1_desktop.ico",
                              "description=Star Citizen Log Monitor");
         
         // Create start menu shortcut
@@ -40,7 +40,7 @@ Component.prototype.createOperations = function()
                              "@TargetDir@/Logi.exe", 
                              "@StartMenuDir@/Logi.lnk",
                              "workingDirectory=@TargetDir@",
-                             "iconPath=@TargetDir@/Logi.exe", 
+                             "iconPath=@TargetDir@/Logo_Logi_v1_desktop.ico", 
                              "description=Star Citizen Log Monitor");
     }
 }

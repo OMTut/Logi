@@ -16,6 +16,13 @@ qt_add_executable(appLogi
     src/UpdateChecker.cpp
 )
 
+# Add resources
+qt_add_resources(appLogi "resources"
+    PREFIX "/"
+    FILES
+        resources/Logo_Logi_v1_desktop.ico
+)
+
 qt_add_qml_module(appLogi
     URI Logi
     VERSION 1.0
