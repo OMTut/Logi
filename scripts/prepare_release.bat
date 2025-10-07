@@ -31,7 +31,6 @@ if not exist "%BUILD_DIR%\%MAIN_EXE%" (
 
 REM Check if build is up to date
 echo Checking if build is up to date...
-REM Check build vs CMakeLists.txt timestamps
 powershell -ExecutionPolicy Bypass -File "scripts\check_build_time.ps1" -BuildFile "%BUILD_DIR%\%MAIN_EXE%"
 if %ERRORLEVEL% neq 0 (
     pause
@@ -44,6 +43,10 @@ if exist "%RELEASE_DIR%" (
     rmdir /s /q "%RELEASE_DIR%"
 )
 mkdir "%RELEASE_DIR%"
+
+REM Deploy Qt dependencies
+echo Deploying Qt dependencies...
+windeployqt "%BUILD_DIR%\%MAIN_EXE%" --qmldir . --verbose 0
 
 REM Copy all files from build directory
 echo Copying files from build directory...
