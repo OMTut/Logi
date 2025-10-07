@@ -1,17 +1,11 @@
 {
-  "version": "1.0.0",
-  "update_message": "Initial release of Logi - Star Citizen log monitoring overlay",
-  "download_url": "https://github.com/OMTut/Logi/releases/download/v1.0.0/LogiSetup.exe",
-  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.0.0",
-  "file_size": 60523362,
+  "version": "1.0.1",
+  "update_message": "Added application icon and branding",
+  "download_url": "https://github.com/OMTut/Logi/releases/download/v1.0.1/LogiSetup.exe",
+  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.0.1",
+  "file_size": 60515704,
   "update_required": false,
   "changelog": [
-    "Real-time Star Citizen log monitoring",
-    "Actor death event tracking",
-    "Always-on-top overlay interface",
-    "Game process detection",
-    "Automatic update system",
-    "Settings persistence",
-    "Modern Qt Quick UI"
+    "Added application icon and branding"
   ]
 }
