@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 echo Building Logi Installer with Inno Setup...
 
 REM Set paths
@@ -57,8 +58,10 @@ if exist "%~dp0output\LogiSetup.exe" (
 )
 
 if exist "%~dp0output\LogiSetup.exe" (
-    set /a size_mb=%%~zA/1024/1024
-    echo Approximate size: !size_mb! MB
+    for %%A in ("%~dp0output\LogiSetup.exe") do (
+        set /a size_mb=%%~zA/1024/1024
+        echo Approximate size: !size_mb! MB
+    )
 )
 
 echo.
