@@ -1,11 +1,12 @@
 {
-  "version": "1.0.1",
-  "update_message": "Added application icon and branding",
-  "download_url": "https://github.com/OMTut/Logi/releases/download/v1.0.1/LogiSetup.exe",
-  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.0.1",
-  "file_size": 60515704,
+  "version": "1.1.0",
+  "update_message": "Added silent update functionality",
+  "download_url": "https://github.com/OMTut/Logi/releases/download/v1.1.0/LogiSetup.exe",
+  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.1.0",
+  "file_size": 30810717,
   "update_required": false,
   "changelog": [
-    "Added application icon and branding"
+    "Added silent update functionaltiy to Update Now button",
+    "- the app updates, closes the old app and opens the newly updated one"
   ]
 }
