@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QTimer>
 #include <QVersionNumber>
+#include <QProcess>
 
 class UpdateChecker : public QObject
 {
@@ -41,6 +42,8 @@ public:
     Q_INVOKABLE void downloadUpdate();
     Q_INVOKABLE void openReleaseNotes();
     Q_INVOKABLE QString getCurrentVersion() const;
+    // New: one-click silent update (download + silent install + app exit)
+    Q_INVOKABLE void performUpdateSilent();
     
     // Testing support
     void setVersionCheckUrl(const QString &url);
@@ -53,6 +56,8 @@ signals:
     void downloadProgress(qint64 received, qint64 total);
     void downloadComplete(const QString &filePath);
     void downloadFailed(const QString &errorMessage);
+    // Emitted when we start the installation phase (after download)
+    void installStarted();
 
 private slots:
     void onUpdateCheckFinished();
@@ -64,6 +69,7 @@ private:
     bool isVersionNewer(const QString &currentVersion, const QString &latestVersion) const;
     void setUpdateAvailable(bool available);
     void setIsChecking(bool checking);
+    void runInstallerSilently(const QString &installerPath);
 
     // Network
     QNetworkAccessManager *m_networkManager;

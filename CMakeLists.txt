@@ -35,6 +35,7 @@ qt_add_qml_module(appLogi
         components/SettingsWindow.qml
         components/LogEntryViewer.qml
         components/UpdateBanner.qml
+        components/UpdateProgressDialog.qml
         components/ResizeCorner.qml
 
     RESOURCES

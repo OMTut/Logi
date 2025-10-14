@@ -100,10 +100,10 @@ Rectangle {
             }
         }
         
-        // Update button
+// Update button
         Button {
             id: updateButton
-            text: "Download Update"
+            text: "Update Now"
             width: 120
             height: 26
             anchors.verticalCenter: parent.verticalCenter
@@ -125,10 +125,65 @@ Rectangle {
             
             onClicked: {
                 if (updateChecker) {
-                    updateChecker.downloadUpdate()
+                    // Show progress dialog and start silent update
+                    var dialog = getUpdateProgressDialog()
+                    if (dialog) {
+                        dialog.progress = 0
+                        dialog.statusText = "Downloading update..."
+                        dialog.canCancel = false
+                        dialog.isComplete = false
+                        dialog.open()
+                    }
+                    updateChecker.performUpdateSilent()
                 }
             }
         }
+    }
+    
+    // Progress dialog instance
+    Loader {
+        id: progressLoader
+        active: true
+        source: "UpdateProgressDialog.qml"
+        onLoaded: {
+            // Wire up signals after the component is ready
+            if (updateChecker) {
+                updateChecker.downloadProgress.connect(function(received, total) {
+                    var dialog = getUpdateProgressDialog()
+                    if (dialog) {
+                        if (total > 0) {
+                            dialog.progress = received / total
+                        } else {
+                            dialog.progress = 0
+                        }
+                    }
+                })
+                updateChecker.downloadComplete.connect(function(filePath) {
+                    var dialog = getUpdateProgressDialog()
+                    if (dialog) {
+                        dialog.statusText = "Installing..."
+                        dialog.progress = 1.0
+                    }
+                })
+                updateChecker.installStarted.connect(function() {
+                    var dialog = getUpdateProgressDialog()
+                    if (dialog) {
+                        dialog.statusText = "Installing..."
+                    }
+                })
+                updateChecker.downloadFailed.connect(function(msg) {
+                    var dialog = getUpdateProgressDialog()
+                    if (dialog) {
+                        dialog.statusText = "Update failed: " + msg
+                        dialog.isComplete = true
+                    }
+                })
+            }
+        }
+    }
+
+    function getUpdateProgressDialog() {
+        return progressLoader.item
     }
     
     // Close button (only for optional updates) - positioned to align with title bar

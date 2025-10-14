@@ -55,7 +55,9 @@ Source: "..\release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cr
 Name: "{autodesktop}\Logi"; Filename: "{app}\Logi.exe"; IconFilename: "{app}\Logo_Logi_v1_desktop.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\Logi.exe"; Description: "{cm:LaunchProgram,Logi}"; Flags: nowait postinstall skipifsilent
+; Launch app after installation - for both regular install and silent updates
+; This ensures automatic restart after updates
+Filename: "{app}\Logi.exe"; Description: "{cm:LaunchProgram,Logi}"; Flags: nowait postinstall
 
 [Messages]
 ; Override default messages with custom text

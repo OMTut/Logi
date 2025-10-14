@@ -1,0 +1,14 @@
+{
+  "version": "1.0.2",
+  "update_message": "Testing silent update functionality - DO NOT USE IN PRODUCTION",
+  "download_url": "http://localhost:8080/LogiSetup.exe",
+  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.0.1",
+  "file_size": 122000000,
+  "update_required": false,
+  "changelog": [
+    "Testing silent update system",
+    "This is a test version - not for production use",
+    "One-click update with progress dialog",
+    "Silent installer with automatic restart"
+  ]
+}

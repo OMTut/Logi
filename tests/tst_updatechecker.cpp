@@ -38,6 +38,9 @@ private slots:
     void testMultipleSimultaneousChecks();
     void testCheckTimeout();
 
+    // Manual testing methods
+    void testSilentUpdateFlow(); // For manual testing only
+
 private:
     UpdateChecker *updateChecker;
     MockUpdateServer *mockServer;
@@ -321,6 +324,47 @@ void TestUpdateChecker::testCheckTimeout()
 {
     // TODO: Implement timeout testing
     // This would require a mock server that delays responses
+}
+
+void TestUpdateChecker::testSilentUpdateFlow()
+{
+    // This is a manual test for the silent update functionality
+    // To use this test:
+    // 1. Start the test server: python tests/update_test/test_server.py
+    // 2. Run this specific test: ctest -R testSilentUpdateFlow
+    // 3. This will point UpdateChecker to localhost:8080 for testing
+    
+    qDebug() << "🧪 Manual test: Configuring UpdateChecker for local testing";
+    qDebug() << "📝 Make sure test server is running on localhost:8080";
+    qDebug() << "🔗 Command: python tests/update_test/test_server.py";
+    
+    // Point to local test server
+    updateChecker->setVersionCheckUrl("http://localhost:8080/version.json");
+    
+    // Set current version to something lower than test (1.0.2)
+    QCoreApplication::setApplicationVersion("1.0.1");
+    
+    QSignalSpy availableSpy(updateChecker, &UpdateChecker::updateAvailableChanged);
+    QSignalSpy completeSpy(updateChecker, &UpdateChecker::updateCheckComplete);
+    
+    qDebug() << "🔄 Starting update check...";
+    updateChecker->checkForUpdates();
+    
+    // Wait for completion
+    QVERIFY2(completeSpy.wait(10000), "Update check timed out");
+    
+    qDebug() << "✅ Update check completed";
+    qDebug() << "📊 Update available:" << updateChecker->updateAvailable();
+    qDebug() << "🔢 Latest version:" << updateChecker->latestVersion();
+    qDebug() << "💬 Update message:" << updateChecker->updateMessage();
+    
+    if (updateChecker->updateAvailable()) {
+        qDebug() << "🎯 Update detected! You can now test the silent update UI";
+        qDebug() << "📱 Run the Logi app and look for the update banner";
+        qDebug() << "🖱️  Click 'Update Now' to test the progress dialog and silent installation";
+    } else {
+        qDebug() << "❌ No update detected. Check test server and version numbers.";
+    }
 }
 
 QTEST_MAIN(TestUpdateChecker)
