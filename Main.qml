@@ -18,6 +18,9 @@ Window {
     // Window opacity management - Start in overlay mode
     opacity: Theme.window.opacityHidden
     
+    // PvP filter property - false = show all, true = show PvP only
+    property bool pvpFilterEnabled: false
+    
     // Optional: Set minimum size
     minimumWidth: 540
     minimumHeight: 280
@@ -60,6 +63,10 @@ Window {
             targetWindow: mainWindow
             windowOpacity: mainWindow.opacity
             showOpacity: true
+            pvpFilterEnabled: mainWindow.pvpFilterEnabled
+            onPvpFilterEnabledChanged: {
+                mainWindow.pvpFilterEnabled = pvpFilterEnabled
+            }
         }
         
         // Update notification banner - positioned below title bar
@@ -158,6 +165,7 @@ Window {
                 id: statusIndicator
                 width: parent.width
                 height: parent.height
+                pvpFilterEnabled: mainWindow.pvpFilterEnabled
             }
         }
         

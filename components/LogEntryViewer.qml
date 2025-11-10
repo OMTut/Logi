@@ -14,6 +14,19 @@ Rectangle {
     // Store log entries
     property var logEntries: []
     
+    // Filter property - when true, show only PvP kills (non-NPC kills)
+    property bool showPvPOnly: false
+    
+    // Filtered entries based on showPvPOnly flag
+    property var filteredEntries: {
+        if (!showPvPOnly) {
+            return logEntries
+        }
+        return logEntries.filter(function(entry) {
+            return !entry.isNPC
+        })
+    }
+    
     // Connect to LogReader signals to capture new log lines
     Connections {
         target: logReader
@@ -31,8 +44,8 @@ Rectangle {
             for (var i = filteredLines.length - 1; i >= 0; i--) {
                 root.logEntries.unshift(filteredLines[i])
             }
-            // Trigger model update
-            logListView.model = root.logEntries
+            // Trigger model update with filtered entries
+            logListView.model = root.filteredEntries
             // Keep position at top (showing newest entries)
             Qt.callLater(function() {
                 if (logListView.count > 0) {
@@ -44,14 +57,14 @@ Rectangle {
         function onLogFileExistsChanged() {
             // Just clear the view when log file state changes
             root.logEntries = []
-            logListView.model = root.logEntries
+            logListView.model = root.filteredEntries
         }
         
         function onMonitoringChanged() {
             // Clear view when monitoring starts/stops
             if (logReader.monitoring) {
                 root.logEntries = []
-                logListView.model = root.logEntries
+                logListView.model = root.filteredEntries
             }
         }
     }
@@ -141,7 +154,7 @@ Rectangle {
     ListView {
         id: logListView
         anchors.fill: parent
-        model: root.logEntries
+        model: root.filteredEntries
         clip: true
         
         delegate: Item {

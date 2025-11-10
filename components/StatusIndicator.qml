@@ -5,6 +5,7 @@ import "../styles/Theme.js" as Theme
 Column {
     id: root
     property bool online: processChecker.isGameRunning
+    property bool pvpFilterEnabled: false
     spacing: 12
     
     // Connect to ProcessChecker signals
@@ -143,5 +144,6 @@ Column {
         id: logViewer
         width: parent.width
         height: Math.max(200, mainWindow.height * 0.9) // 60% of window height, minimum 200px
+        showPvPOnly: root.pvpFilterEnabled
     }
 }

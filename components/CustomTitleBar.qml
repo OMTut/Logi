@@ -15,6 +15,9 @@ Rectangle {
     property real windowOpacity: 1.0
     property Window targetWindow: null
     
+    // PvP filter property
+    property bool pvpFilterEnabled: false
+    
     // Window drag functionality
     DragHandler {
         target: null
@@ -37,8 +40,21 @@ Rectangle {
         font.bold: true
     }
     
+    // PvP filter toggle switch
+    PvPToggleSwitch {
+        id: pvpToggleSwitch
+        anchors.right: windowControlsRow.left
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.rightMargin: 36  // Extra space to clear opacity text
+        toggled: titleBar.pvpFilterEnabled
+        onToggledChanged: {
+            titleBar.pvpFilterEnabled = toggled
+        }
+    }
+    
     // Window controls on the right
     Row {
+        id: windowControlsRow
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.rightMargin: Theme.spacing.s2
@@ -52,6 +68,8 @@ Rectangle {
             color: Theme.colors.textSecondary
             font.pixelSize: Theme.fonts.sizeXS
             visible: true
+            width: 35  // Fixed width to prevent shifting
+            horizontalAlignment: Text.AlignRight
         }
         
         // Minimize button

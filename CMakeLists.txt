@@ -34,6 +34,7 @@ qt_add_qml_module(appLogi
         components/SettingsDialog.qml
         components/SettingsWindow.qml
         components/LogEntryViewer.qml
+        components/PvPToggleSwitch.qml
         components/UpdateBanner.qml
         components/UpdateProgressDialog.qml
         components/ResizeCorner.qml
