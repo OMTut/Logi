@@ -71,7 +71,7 @@ Rectangle {
     // Tooltip
     ToolTip {
         visible: mouseArea.containsMouse
-        text: toggled ? "Showing PvP kills only" : "Showing all kills"
+        text: toggled ? "Showing PvP only" : "Showing all"
         delay: 500
     }
     
