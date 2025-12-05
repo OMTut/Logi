@@ -1,12 +1,12 @@
 {
-  "version": "1.1.0",
-  "update_message": "Added silent update functionality",
+  "version": "1.2.0",
+  "update_message": "Added pvp / pve filtering",
   "download_url": "https://github.com/OMTut/Logi/releases/download/v1.1.0/LogiSetup.exe",
   "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.1.0",
-  "file_size": 30810717,
+  "file_size": 30838666,
   "update_required": false,
   "changelog": [
-    "Added silent update functionaltiy to Update Now button",
-    "- the app updates, closes the old app and opens the newly updated one"
+    "Added pvp / pve filtering toggle",
+    "- the app filters pve (all) or pvp (just pvp) messages"
   ]
 }
