@@ -3,7 +3,7 @@
   "update_message": "Added pvp / pve filtering",
   "download_url": "https://github.com/OMTut/Logi/releases/download/v1.2.0/LogiSetup.exe",
   "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.2.0",
-  "file_size": 30838678,
+  "file_size": 30841097,
   "update_required": false,
   "changelog": [
     "Added pvp / pve filtering toggle",
