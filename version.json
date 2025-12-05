@@ -1,9 +1,9 @@
 {
   "version": "1.2.0",
   "update_message": "Added pvp / pve filtering",
-  "download_url": "https://github.com/OMTut/Logi/releases/download/v1.1.0/LogiSetup.exe",
-  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.1.0",
-  "file_size": 30838666,
+  "download_url": "https://github.com/OMTut/Logi/releases/download/v1.2.0/LogiSetup.exe",
+  "release_notes_url": "https://github.com/OMTut/Logi/releases/tag/v1.2.0",
+  "file_size": 30838678,
   "update_required": false,
   "changelog": [
     "Added pvp / pve filtering toggle",

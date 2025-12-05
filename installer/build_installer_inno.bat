@@ -8,6 +8,15 @@ set SCRIPT_FILE=%~dp0logi-setup.iss
 set SOURCE_DIR=%~dp0..
 set DIST_DIR=%SOURCE_DIR%\release
 
+REM Extract version from CMakeLists.txt
+for /f "tokens=3" %%i in ('findstr /C:"project(Logi VERSION" "%SOURCE_DIR%\CMakeLists.txt"') do set APP_VERSION=%%i
+if not defined APP_VERSION (
+    echo Error: Could not extract version from CMakeLists.txt
+    pause
+    exit /b 1
+)
+echo Detected version: %APP_VERSION%
+
 REM Check if Inno Setup is installed
 if not exist "%INNO_SETUP_PATH%\iscc.exe" (
     echo Error: Inno Setup not found at "%INNO_SETUP_PATH%"
@@ -37,7 +46,7 @@ echo Using Inno Setup at: "%INNO_SETUP_PATH%"
 
 REM Create the installer
 echo Compiling installer script...
-"%INNO_SETUP_PATH%\iscc.exe" "%SCRIPT_FILE%"
+"%INNO_SETUP_PATH%\iscc.exe" /DAppVersion=%APP_VERSION% "%SCRIPT_FILE%"
 
 if %ERRORLEVEL% neq 0 (
     echo Error creating installer!

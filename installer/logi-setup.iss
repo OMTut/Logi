@@ -1,11 +1,16 @@
 ; Inno Setup Script for Logi - Star Citizen Log Monitor
 ; This script creates a Windows installer for the Logi application with custom Star Citizen theming
 
+; Define default version if not passed via command line
+#ifndef AppVersion
+  #define AppVersion "1.2.0"
+#endif
+
 [Setup]
 ; Application Information
 AppName=Logi - Star Citizen Log Monitor
-AppVersion=1.0.0
-AppVerName=Logi - Star Citizen Log Monitor 1.0.0
+AppVersion={#AppVersion}
+AppVerName=Logi - Star Citizen Log Monitor {#AppVersion}
 AppPublisher=Logi
 
 ; Installation Settings
